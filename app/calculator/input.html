@@ -1,0 +1,105 @@
+<form ng-submit='calcCtrl.calculate()'>
+
+    <p>
+        <label>Calculate:</label>
+        <br>
+        <select ng-model='calcCtrl.input.calculationType' ng-options="key as value for (key , value) in calcCtrl.calculationTypes">
+
+        </select>
+    </p>
+
+    <hr />
+
+    <h2>
+        <input ng-model='calcCtrl.input.partyAName'>
+    </h2>
+
+    <p>
+        <label>Employment Income:</label>
+        <input type='number' ng-model='calcCtrl.input.partyAIncome' />
+    </p>
+
+    <p>
+        <label>Province:</label>
+        <select ng-model='calcCtrl.input.partyAProvinceId' ng-options='p for p in calcCtrl.provinces'></select>
+    </p>
+
+    <p ng-if="calcCtrl.input.calculationType == 0 || calcCtrl.input.calculationType == 2">
+    <label>Birthdate:</label>
+        <input ng-model='calcCtrl.input.partyADOB' required />
+    </p>
+
+    <hr>
+
+    <h2><input ng-model='calcCtrl.input.partyBName'></h2>
+
+    <p>
+        <label>Employment Income:</label>
+        <input type='number' ng-model='calcCtrl.input.partyBIncome' />
+    </p>
+
+    <p>
+        <label>Province:</label>
+        <select ng-model='calcCtrl.input.partyBProvinceId' ng-options='p for p in calcCtrl.provinces'></select>
+    </p>
+
+    <p ng-hide="calcCtrl.calculationType == 1">
+        <label>Birthdate:</label>
+        <input ng-model='calcCtrl.input.partyBDOB' required />
+    </p>
+
+    <div ng-hide="calcCtrl.calculationType == 1">
+        <p>
+            <label>Date of Marriage/Cohabitation:</label>
+            <input ng-model='calcCtrl.input.dateOfMarriage' required />
+        </p>
+
+        <p>
+            <label>Date of Separation:</label>
+            <input ng-model='calcCtrl.input.dateOfSeparation' required />
+        </p>
+    </div>
+
+    <div ng-hide='calcCtrl.calculationType == 2'>
+
+        <h2>Children</h2>
+
+        <table style="width: 100%">
+            <thead>
+                <tr>
+                    <td>
+                    </td>
+                    <td>Lives With</td>
+                    <td>Birthdate</td>
+                </tr>
+            </thead>
+            <tbody ng-repeat="child in calcCtrl.input.children">
+                <tr>
+                    <td>{{ child.name }}</td>
+                    <td>
+                        <select ng-model='child.residence'>
+                            <option value=0>Self</option>
+                            <option value=1>Spouse</option>
+                            <option value=2>Shared</option>
+                        </select>
+                    </td>
+                    <td>
+                        <input ng-model='child.dob' />
+                    </td>
+                    <td>
+                        <button type='button' ng-click='calcCtrl.removeChild($index)'>Del</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <button type='button' ng-click='calcCtrl.loadSampleData()'>Load sample data</button>
+        <button type='button' ng-click='calcCtrl.addChild()'>Add Child</button>
+
+    </div>
+
+    <br>
+
+    <!-- <input type='submit' value='calculate' /> -->
+    <button type='button' ui-sref="calculator.result" ng-click='calcCtrl.calculate()'>calculate!</button>
+</form>

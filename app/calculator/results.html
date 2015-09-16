@@ -1,0 +1,153 @@
+<div>
+    <h2>Results</h2>
+
+
+    <div style="font-size:80%">
+
+        <b>IMPORTANT NOTE:</b> This calculator performs very <i>simple and basic</i> child and spousal support calculations under Canadian federal law based on limited information provided by the user. <b>This calculator is intended to provide a starting point or “ballpark” figure</b>, to be adjusted in accordance with the many other factors not considered by this calculator that could dramatically affect these results. This is not legal advice; parties are strongly advised to seek the advice of a family lawyer. <b>Some lawyers offer “unbundled” legal services to assist you with a specific part of your case only, such as: preparing a detailed support calculation and analysis; reviewing or preparing court materials; attending at a court appearance; etc. This can be a cost-effective way of obtaining legal assistance when needed.</b>
+
+        <div style="padding-top:5pt" ng-hide="calcCtrl.calculationType != 2">
+            <b>NOTE:</b> If child support is also being paid, this calculation of spousal support <u>only</u> will <u>not</u> be accurate.
+        </div>
+
+    </div>
+
+
+    <h2>{{ calcCtrl.results.partyAName }}</h2>
+    <p ng-hide='calcCtrl.calculationType == 1'>Age: {{ calcCtrl.results.partyAAge }}</p>
+    <p>Province: {{ calcCtrl.results.partyAProvince }}</p>
+    <p>Employment Income: {{ calcCtrl.results.partyAIncome | currency:'$':0}}</p>
+
+    <h2>{{ calcCtrl.results.partyBName }}</h2>
+    <p ng-hide='calcCtrl.calculationType == 1'>Age: {{ calcCtrl.results.partyBAge }}</p>
+    <p>Province: {{ calcCtrl.results.partyBProvince }}</p>
+    <p>Employment Income: {{ calcCtrl.results.partyBIncome | currency:'$':0 }}</p>
+
+
+    <div ng-hide='calcCtrl.calculationType == 1'>
+
+        <p class="h3">Dates of:</p>
+        <p>Marriage/Cohabitation: {{ calcCtrl.results.dateOfMarriage | date:'medium'}}</p>
+        <p>Separation: {{calcCtrl.results.dateOfSeparation}} </p>
+        <p>Length of Marriage/Cohabitation: {{ calcCtrl.results.lengthOfMarriage }}</p>
+
+    </div>
+
+
+    <div ng-show='calcCtrl.children.length'>
+        <table style="width: 100%">
+            <thead>
+                <tr>
+                    <td>
+                        <h2>Children</h2></td>
+                    <td>Lives With</td>
+                    <td>Age</td>
+                </tr>
+            </thead>
+            <tbody ng-repeat="child in calcCtrl.children">
+                <tr>
+                    <td>{{child.name}}</td>
+                    <td>{{ child.livesWith }}</td>
+                    <td>{{ child.age }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+
+    <div ng-hide='calcCtrl.calculationType==2'>
+
+        <h2>Child Support<img class="r_tip" tip=5 /></h2>
+
+        <h3>CSG Table Amount<img class="r_tip" tip=6 /></h3>
+
+        <p ng-show='calcCtrl.csTableAmount'>
+
+            {{ calcCtrl.results.csPayor }} pays {{ calcCtrl.results.csRecipient }} child support of <b>{{ calcCtrl.results.csTableAmount | currency: '$':0 }} per month</b>,
+
+            <span ng-hide='calcCtrl.mscCustodyType <= 2'>
+                as a starting point subject to further adjustments,
+            </span> according to the Child Support Guidelines ("CSG").
+        </p>
+
+        <p ng-hide='calcCtrl.csTableAmount != 0'>
+            No child support is payable according to the Child Support Guidelines ("CSG")
+        </p>
+
+        <p ng-show='calcCtrl.csPayorIncome > 150000'>The child support payor's income is over $150,000, and so the CSG Table Amount calculated <i>may</i> not be appropriate in the circumstances, according to the CSG. Consult a family lawyer.</p>
+
+        <p ng-show='childOverAgeOfMajority'>A child is over the age of majority, and so the CSG Table Amount calculated may not be appropriate in the circumstances, according to the CSG. Consult a family lawyer.</p>
+
+
+        <h3>Child Support - CSG Special Expenses<img class="r_tip" tip=7 /></h3>
+        <p>
+            In addition to the CSG Table Amount above, the parties must both <b>contribute to the children's Special Expenses</b> (eg. child care, medical expenses, <i>extraordinary</i> educational expenses, post-secondary expenses, and <i>extraordinary</i> extra-curricular activities), if any.</p>
+        <p>
+            The amount of each party's contribution depends on a comparison of the parties' incomes; the party with more income will pay a larger share of the Special Expenses.<img class="r_tip" tip=8 />
+
+
+        </p>
+    </div>
+
+    <!-- ko if: calculationType != 1 -->
+    <h2>Spousal Support<img class="r_tip" tip=9 /> - SSAG<img class="r_tip" tip=10 /></h2>
+
+
+    <div ng-show='calcCtrl.ssPayorIncome >= 20000'>
+
+        <p ng-show='calcCtrl.ssagHighQuantum==0'>
+            No spousal support is payable according the Spousal Support Advisory Guidelines ("SSAG") - "{{ calcCtrl.results.formulaName }}" Formula.<img class="r_tip" tip=12 />
+
+        </p>
+
+        <div ng-show='calcCtrl.ssagHighQuantum>0'>
+            <p>
+
+                If entitlement to spousal support is established,
+
+                <span ng-show='calcCtrl.calculationType < 2'>in addition to any child support to be paid by either party above, </span> {{ calcCtrl.results.ssPayor }} pays {{ calcCtrl.results.ssRecipient }} spousal support in an amount to be determined between <b>
+        {{ calcCtrl.results.ssagLowQuantum | currency:'$':0 }} and {{ calcCtrl.results.ssagHighQuantum | currency:'$':0 }} per month</b> (with a midpoint<img class="r_tip" tip=11 /> of {{ calcCtrl.results.ssagMidQuantum | currency:'$':0 }} per month) for a period to be determined
+                <span ng-show='calcCtrl.ssagHighDuration < 99'>
+            between <b>{{ calcCtrl.results.ssagLowDuration }} to {{ calcCtrl.results.ssagHighDuration }} years</b> from the date of separation
+            </span> according the Spousal Support Advisory Guidelines ("SSAG") - "{{ calcCtrl.results.formulaName }}" Formula.<img class="r_tip" tip=12 />
+
+
+            </p>
+            <p class="calc">Monthly payments of spousal support are taxable to the recipient and tax deductible to the payor, if made pursuant to a written separation agreement or court order.<img class="r_tip" tip=14 />
+
+            </p>
+
+        </div>
+    </div>
+
+    <p ng-show='calcCtrl.ssPayorIncome > 350000'>
+        The spousal support payor's income is over $350,000, and so the range of spousal support calculated <i>may</i> not be appropriate in the circumstances, according to the SSAG. Consult a family lawyer for further details.
+    </p>
+
+    <p ng-show='calcCtrl.ssPayorIncome < 20000'>
+        The spousal support payor's income is under $20,000, and so generally speaking, no spousal support should be payable, according to the SSAG. Occasionally, however, spousal support <i>may</i> be appropriate despite the payor's limited income. Consult a family lawyer for further details.
+    </p>
+
+
+    <p ng-show='calcCtrl.ssPayorIncome > 20000 && calcCtrl.ssPayorIncome < 30000'>
+        The spousal support payor's income is between $20,000 - $30,000, and so the spousal support calculation <i>may</i> not be appropriate in the circumstances, according to the SSAG. Consult a family lawyer for further details.
+    </p>
+
+
+    <!--
+        <div style="text-align:center; padding:20px 0">
+        <button onclick="showInput()" class="alt">Back to Input</button>
+        </div>
+-->
+</div>
+
+
+
+
+
+
+
+
+
+
+</div>
