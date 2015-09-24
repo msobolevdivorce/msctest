@@ -1,0 +1,8 @@
+{
+  "name": "msctest",
+  "version": "0.0.0",
+  "homepage": "https://github.com/msobolevdivorce/msctest",
+  "description": "msc",
+  "main": "app.js",
+  "license": "MIT"
+}
